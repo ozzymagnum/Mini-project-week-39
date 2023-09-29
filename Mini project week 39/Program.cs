@@ -1,16 +1,24 @@
 ﻿
-    
-        // Create assets of different categories
-        Computer computer1 = new Computer("Computer", "HP", "EliteBook", "France", Convert.ToDateTime("2022-10-10"), 1000);
-        Computer computer2 = new Computer("Phone", "Samsung", "XL", "France", Convert.ToDateTime("2022-11-10"), 1000);
-        Phone phone1 = new Phone("Phone", "IPhone", "XLL", "Sweden", Convert.ToDateTime("2023-10-10"), 100);
 
-        // Create a list of assets
-        List<Asset> assets = new List<Asset>
+// Create assets of different categories
+using System.Drawing;
+
+Computer computer1 = new Computer("Computer", "HP", "EliteBook", "France", Convert.ToDateTime("2020-09-10"), 1000);
+Computer computer2 = new Computer("Computer", "MAC", "AirBook", "France", Convert.ToDateTime("2015-11-10"), 1000);
+Computer computer3 = new Computer("Computer", "ASUS", "XS", "Spain", Convert.ToDateTime("2018-12-10"), 1423);
+Computer computer4 = new Computer("Computer", "HP", "A34", "Denmark", Convert.ToDateTime("2023-09-15"), 723);
+Phone phone1 = new Phone("Phone", "IPhone", "XLL", "Sweden", Convert.ToDateTime("2023-8-10"), 100);
+Phone phone2 = new Phone("Phone", "Android", "SL", "USA", Convert.ToDateTime("2022-4-10"), 999);
+
+// Create a list of assets
+List<Asset> assets = new List<Asset>
         {
             computer1,
             computer2,
-            phone1
+            computer3,
+            computer4,
+            phone1,
+            phone2
         };
 
         // Sort the assets by category (computers first, phones second) and then by purchase date
@@ -20,27 +28,36 @@
         .ToList();
 
 
-        // Display assets with category names in line
-        Console.WriteLine("Category".PadRight(15) + "Brand".PadRight(15) + "Model".PadRight(15) + "Office".PadRight(15) + "PurchaseDate".PadRight(15) + "Price");
-        Console.WriteLine("___________________________________________________________________________________");
 
-        foreach (Asset asset in sortedAssets)
-        {
-        string color = ""; // Initialize color as an empty string
-        DateTime currentDate = DateTime.Now;
-        DateTime threeYearsFromPurchase = asset.PurchaseDate.AddYears(3);
+        //Days between puchase date and today to choose color
+        int daysWarning = 990; //Approx 33 months - yellow  
+        int daysAlarm = 1080;  //Approx 36 months - red
 
-         // Check if the purchase date is less than 3 months away from 3 years
-         if (threeYearsFromPurchase.AddMonths(-3) <= currentDate)
+Console.WriteLine("Category".PadRight(15) + "Brand".PadRight(15) + "Model".PadRight(15) + "Office".PadRight(15) + "PurchaseDate".PadRight(15) + "Price");
+Console.WriteLine("___________________________________________________________________________________");
+
+foreach (Asset asset in sortedAssets)
         {
-        color = "RED";
+            TimeSpan diff = DateTime.Now - asset.PurchaseDate;//Calculate time span between today and purchase date
+            DecideForegroundColor(daysWarning, daysAlarm, diff);//Decide right color according to date
+            Console.WriteLine(asset.Type.PadRight(15) + asset.Brand.PadRight(15) + asset.Model.PadRight(15) + asset.Office.PadRight(15) + asset.PurchaseDate.ToShortDateString().PadRight(15) + asset.Price);
         }
 
-        Console.WriteLine($"{asset.Type.PadRight(15)}{asset.Brand.PadRight(15)}{asset.Model.PadRight(15)}{asset.Office.PadRight(15)}{asset.PurchaseDate.ToString("yyyy-MM-dd").PadRight(15)}{asset.Price}{color}");
+        static void DecideForegroundColor(int daysWarning, int daysAlarm, TimeSpan diff)
+        {
+            if (diff.Days > daysAlarm)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+            }
+            else if (diff.Days > daysWarning && diff.Days < daysAlarm)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+            }
         }
-
-        Console.ReadLine(); // Wait for user input before exiting
-
 
 
 
