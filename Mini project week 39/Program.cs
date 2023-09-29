@@ -24,7 +24,8 @@ List<Asset> assets = new List<Asset>
 
         // Sort the assets by category (computers first, phones second) and then by purchase date
         var sortedAssets = assets
-        .OrderBy(asset => asset is Computer ? 0 : 1) // Sort by category
+        .OrderBy(asset => asset is Computer ? 0 : 1) // Sort by categor)
+         .ThenBy(asset => asset.Office)               // Sort by office
         .ThenBy(asset => asset.PurchaseDate)          // Sort by purchase date
         .ToList();
 
@@ -34,7 +35,7 @@ List<Asset> assets = new List<Asset>
         int daysWarning = 990; //Approx 33 months - yellow  
         int daysAlarm = 1080;  //Approx 36 months - red
 
-Console.WriteLine("Category".PadRight(15) + "Brand".PadRight(15) + "Model".PadRight(15) + "Office".PadRight(15) + "PurchaseDate".PadRight(15) + "Price".PadRight(15) + "Local price today");
+Console.WriteLine("Category".PadRight(15) + "Brand".PadRight(15) + "Model".PadRight(15) + "Office".PadRight(15) + "PurchaseDate".PadRight(15) + "Price in SEK".PadRight(15) + "Local price today");
 Console.WriteLine("___________________________________________________________________________________________________________");
 
 foreach (Asset asset in sortedAssets)
